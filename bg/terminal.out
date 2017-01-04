@@ -1,0 +1,7 @@
+be_auauto.cpp:26:2: error: no matching function for call to 'calculate_next_step_gofl'
+        calculate_next_step_gofl(automata_table);
+        ^~~~~~~~~~~~~~~~~~~~~~~~
+be_auauto.cpp:9:6: note: candidate function not viable: no known conversion from 'bool [250][250]' to 'bool **' for 1st argument
+void calculate_next_step_gofl(bool** automata_table);
+     ^
+1 error generated.
