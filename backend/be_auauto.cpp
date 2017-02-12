@@ -9,8 +9,8 @@ int main ()
 	fstream input_file;
 	fstream output_file;
 
-	input_file.open("automata.in", ios::in | ios::binary);
-	output_file.open("automata.out", ios::out | ios::binary);
+	input_file.open("./automata.in", ios::in | ios::binary);
+	output_file.open("./automata.out", ios::out | ios::binary);
 
 	if (!(input_file.is_open() && output_file.is_open()))
 	{
