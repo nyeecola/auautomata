@@ -11,12 +11,15 @@ using namespace std;
 
 class GOFL
 {
+    public:
     // This is the whole table for the game
     // the new game of life table is for iteration purposes
+    // NOTE: this is not guaranteed to be zero'ed, so please call set_values()
+    //       with the initial values you want your GOFL to have.
+    //       Not calling set_values() is undefined behavior.
     int gofl_table[MAX_SIZE][MAX_SIZE];
     int new_gofl_table[MAX_SIZE][MAX_SIZE];
 
-    public:
     // set_values picks a file and put it in gofl_table
     void set_values(fstream&);
     // write_output puts new_gofl_table in a text file
