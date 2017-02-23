@@ -36,3 +36,6 @@
 
 # binaries
 main
+
+# Mac files
+.DS_Store
