@@ -18,3 +18,13 @@ A basic Conway's game of life implemented in C++ using FLTK for cross-platform G
     ```
     build
     ```
+
+### To compile on mac
+- Use one of these commands:
+    MacPorts: 'sudo port install fltk'
+    Homebrew: 'brew install fltk'
+- Then, from the root directory of the project, run:
+
+    ```
+    make
+    ```
