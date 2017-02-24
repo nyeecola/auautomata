@@ -1,6 +1,7 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Double_Window.H>
 #include <FL/fl_draw.H>
+#include <FL/Fl_Value_Slider.H>
 
 #include <iostream>
 #include <fstream>
@@ -52,6 +53,7 @@ void update(void *)
     gofl.write_output(output_file);
     Fl::redraw();
     Fl::repeat_timeout(FRAME_TIME, update);
+
 }
 
 /*
@@ -96,8 +98,16 @@ int main(int argc, char** argv) {
 
     // create window and drawing area
     // NOTE: we're using a software renderer
-    Fl_Double_Window window(300,300);
+    Fl_Double_Window window(450,300);
     Drawing drawing(0,0,300,300);
+
+    // Drawing horizontal slider to change speed
+    Fl_Value_Slider slider (310, 15, 130, 25, 0);
+    slider.type(FL_HOR_NICE_SLIDER);
+    slider.bounds(1, 0.05);
+    slider.value(1);
+
+    // Stopped adding widgets for the window
     window.end();
     window.show(argc,argv);
 

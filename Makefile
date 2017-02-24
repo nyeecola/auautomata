@@ -14,7 +14,7 @@ all: build run
 
 	
 build:
-	@echo $(OS_COMMAND)
+	$(OS_COMMAND)
 
 run:
 	./main
