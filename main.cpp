@@ -8,13 +8,24 @@
 #include <cmath>
 #include "backend/gofl.h"
 
-#define MIN_SPEED 1
-#define MAX_SPEED 10
-#define INITIAL_SPEED 5.5
+#define MIN_FRAMERATE 0.01
+#define MAX_FRAMERATE 3
+#define MIN_SLIDER_VALUE 1
+#define MAX_SLIDER_VALUE 100
+#define INITIAL_SLIDER_VALUE ((MAX_SLIDER_VALUE + MIN_SLIDER_VALUE)/2)
 
-double frame_time = 0.006 * exp(0.512 * INITIAL_SPEED);
+double frame_time, a, b;
 GOFL gofl;
 fstream input_file, output_file;
+
+void calculate_framerate_constants()
+{
+
+    b = log(MAX_FRAMERATE/MIN_FRAMERATE)/(MAX_SLIDER_VALUE - MIN_SLIDER_VALUE);
+    a = MAX_FRAMERATE / (exp(b*MAX_SLIDER_VALUE));
+
+    frame_time = a * exp(b * INITIAL_SLIDER_VALUE);
+}
 
 /*
    Draws a grid on the screen using the global variable `gofl` and the #define `MAX_SIZE`.
@@ -86,7 +97,7 @@ class Drawing : public Fl_Widget {
 void slider_cb(Fl_Widget *slider, void *data)
 {
     Fl_Slider *s = (Fl_Slider*)slider;
-    frame_time = 0.006 * exp(0.512 * s->value());
+    frame_time = a * exp(b * s->value());
 };
 
 /*
@@ -119,10 +130,11 @@ int main(int argc, char** argv) {
     // Drawing horizontal slider to change speed
     Fl_Value_Slider *slider = new Fl_Value_Slider(310, 15, 130, 25, 0);
     slider->type(FL_HOR_NICE_SLIDER);
-    slider->bounds(MIN_SPEED, MAX_SPEED);
+    calculate_framerate_constants();
+    slider->bounds(MIN_SLIDER_VALUE, MAX_SLIDER_VALUE);
     slider->step(0.5);
     slider->callback(slider_cb, (void*)0);
-    slider->value(INITIAL_SPEED);
+    slider->value(INITIAL_SLIDER_VALUE);
 
     // Stopped adding widgets for the window
     window.end();
