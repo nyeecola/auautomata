@@ -5,10 +5,14 @@
 
 #include <iostream>
 #include <fstream>
+#include <cmath>
 #include "backend/gofl.h"
 
-#define FRAME_TIME 0.05
+#define MIN_SPEED 1
+#define MAX_SPEED 10
+#define INITIAL_SPEED 5.5
 
+double frame_time = 0.006 * exp(0.512 * INITIAL_SPEED);
 GOFL gofl;
 fstream input_file, output_file;
 
@@ -45,15 +49,14 @@ void draw_grid(int cell_size, int offset_x, int offset_y)
 }
 
 /*
-   Updates the game and redraws the screen after a periodic delay of `FRAME_TIME` seconds.
+   Updates the game and redraws the screen after a periodic delay of `frame_time` seconds.
  */ 
 void update(void *)
 {
     gofl.next_step();
     gofl.write_output(output_file);
     Fl::redraw();
-    Fl::repeat_timeout(FRAME_TIME, update);
-
+    Fl::repeat_timeout(frame_time, update);
 }
 
 /*
@@ -72,6 +75,18 @@ class Drawing : public Fl_Widget {
     }
     public:
     Drawing(int X,int Y,int W,int H) : Fl_Widget(X,Y,W,H) {}
+};
+
+/*
+   This function is called when the value of the slider is changed.
+
+   @slider :: slider uncasted (must first be casted before being used)
+   @data   :: extra data, not currently used for anything
+ */
+void slider_cb(Fl_Widget *slider, void *data)
+{
+    Fl_Slider *s = (Fl_Slider*)slider;
+    frame_time = 0.006 * exp(0.512 * s->value());
 };
 
 /*
@@ -102,10 +117,12 @@ int main(int argc, char** argv) {
     Drawing drawing(0,0,300,300);
 
     // Drawing horizontal slider to change speed
-    Fl_Value_Slider slider (310, 15, 130, 25, 0);
-    slider.type(FL_HOR_NICE_SLIDER);
-    slider.bounds(1, 0.05);
-    slider.value(1);
+    Fl_Value_Slider *slider = new Fl_Value_Slider(310, 15, 130, 25, 0);
+    slider->type(FL_HOR_NICE_SLIDER);
+    slider->bounds(MIN_SPEED, MAX_SPEED);
+    slider->step(0.5);
+    slider->callback(slider_cb, (void*)0);
+    slider->value(INITIAL_SPEED);
 
     // Stopped adding widgets for the window
     window.end();
@@ -120,8 +137,8 @@ int main(int argc, char** argv) {
         input_file.close();
      */
 
-    // schedule a periodic update after a delay of `FRAME_TIME` seconds
-    Fl::add_timeout(FRAME_TIME, update);
+    // schedule a periodic update after a delay of `frame_time` seconds
+    Fl::add_timeout(frame_time, update);
 
     return Fl::run();
 }
