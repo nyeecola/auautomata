@@ -125,6 +125,7 @@ int main(int argc, char** argv) {
     // create window and drawing area
     // NOTE: we're using a software renderer
     Fl_Double_Window window(450,300);
+    window.color(FL_DARK3);
     Drawing drawing(0,0,300,300);
 
     // Drawing horizontal slider to change speed
@@ -135,6 +136,9 @@ int main(int argc, char** argv) {
     slider->step(0.5);
     slider->callback(slider_cb, (void*)0);
     slider->value(INITIAL_SLIDER_VALUE);
+    slider->color(FL_RED, FL_RED);
+    slider->textcolor(FL_WHITE);
+    slider->textsize(11);
 
     // Stopped adding widgets for the window
     window.end();
